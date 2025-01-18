@@ -1,0 +1,4 @@
+{
+    "**/*.{ts,tsx}": ["eslint \"{src,apps,libs,test}/**/*.ts\" --fix", "prettier --write \"src/**/*.ts\" \"test/**/*.ts\""],
+    "**/*.{html,css,js,json,md,yml}": ["eslint \"{src,apps,libs,test}/**/*.ts\" --fix", "prettier --write \"src/**/*.ts\" \"test/**/*.ts\""]
+}
