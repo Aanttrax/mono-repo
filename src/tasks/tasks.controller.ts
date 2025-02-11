@@ -1,11 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put } from '@nestjs/common';
 import { TasksService } from './tasks.service';
+import { CreateTaskDto } from './dto/create-task.dto';
+import { UpdateTaskDto } from './dto/update-task.dto';
 
-export interface ITask {
-  title: string;
-  description: string;
-  done: boolean;
-}
 @Controller()
 export class TasksController {
   constructor(private tasksService: TasksService) {}
@@ -16,7 +13,8 @@ export class TasksController {
   }
 
   @Post('/task')
-  createTask(@Body() task: ITask) {
+  @HttpCode(201)
+  createTask(@Body() task: CreateTaskDto) {
     return this.tasksService.createTask(task);
   }
 
@@ -26,8 +24,8 @@ export class TasksController {
   }
 
   @Put('/task/:taskId')
-  updateTask(@Param('taskId') taskId: string) {
-    return this.tasksService.updateTask(taskId);
+  updateTask(@Param('taskId') taskId: string, @Body() task: UpdateTaskDto) {
+    return this.tasksService.updateTask(taskId, task);
   }
 
   @Delete('/task/:taskId')
