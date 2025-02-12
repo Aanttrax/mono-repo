@@ -1,29 +1,52 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Task } from 'src/schemas/task.schema';
+import { Model, Types } from 'mongoose';
 
 @Injectable()
 export class TasksService {
-  getTasks() {
-    return 'All tasks';
+  constructor(@InjectModel(Task.name) private taskModel: Model<Task>) {}
+
+  async getTasks(userId: string) {
+    return await this.taskModel
+      .find({ userId: new Types.ObjectId(userId) }, { createdAt: 0, updatedAt: 0 })
+      .sort({ done: -1 })
+      .lean()
+      .exec();
   }
 
-  createTask(task: CreateTaskDto) {
-    return task;
+  async createTask(task: CreateTaskDto, userId: string) {
+    console.log(task);
+    const newTask = new this.taskModel({ ...task, userId });
+    await newTask.save();
+    return;
   }
 
-  getTaskById(taskId: string) {
+  async getTaskById(taskId: string, userId: string) {
     console.log(taskId);
-    return 'Task by ID';
+    return await this.taskModel
+      .findOne({ _id: new Types.ObjectId(taskId), userId: new Types.ObjectId(userId) }, { createdAt: 0, updatedAt: 0 })
+      .lean()
+      .exec();
   }
 
-  updateTask(taskId: string, task: UpdateTaskDto) {
+  async updateTask(taskId: string, task: UpdateTaskDto, userId: string) {
     console.log(taskId, task);
-    return 'Task updated';
+    await this.taskModel
+      .findOneAndUpdate({ _id: new Types.ObjectId(taskId), userId: new Types.ObjectId(userId) }, task)
+      .lean()
+      .exec();
+    return;
   }
 
-  deleteTask(taskId: string) {
+  async deleteTask(taskId: string, userId: string) {
     console.log(taskId);
-    return 'Task deleted';
+    await this.taskModel
+      .findOneAndDelete({ _id: new Types.ObjectId(taskId), userId: new Types.ObjectId(userId) })
+      .lean()
+      .exec();
+    return;
   }
 }
