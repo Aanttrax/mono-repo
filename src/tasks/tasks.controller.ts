@@ -9,27 +9,27 @@ export class TasksController {
 
   @Get('/task')
   getTasks() {
-    return this.tasksService.getTasks();
+    return this.tasksService.getTasks('asasa');
   }
 
   @Post('/task')
   @HttpCode(201)
   createTask(@Body() task: CreateTaskDto) {
-    return this.tasksService.createTask(task);
+    return this.tasksService.createTask(task, 'sfkjsfh');
   }
 
   @Get('/task/:taskId')
   getTaskById(@Param('taskId') taskId: string) {
-    return this.tasksService.getTaskById(taskId);
+    return this.tasksService.getTaskById(taskId, 'asdfsaf');
   }
 
   @Put('/task/:taskId')
   updateTask(@Param('taskId') taskId: string, @Body() task: UpdateTaskDto) {
-    return this.tasksService.updateTask(taskId, task);
+    return this.tasksService.updateTask(taskId, task, 'kajshfs');
   }
 
   @Delete('/task/:taskId')
   deleteTask(@Param('taskId') taskId: string) {
-    return this.tasksService.deleteTask(taskId);
+    return this.tasksService.deleteTask(taskId, 'asdfsa');
   }
 }
