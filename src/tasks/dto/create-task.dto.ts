@@ -3,9 +3,9 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class CreateTaskDto {
   @IsString()
   @IsNotEmpty()
-  title: string;
+  readonly title: string;
 
   @IsString()
   @IsNotEmpty()
-  description: string;
+  readonly description: string;
 }

@@ -2,11 +2,11 @@ import { IsBoolean, IsString } from 'class-validator';
 
 export class TaskDto {
   @IsString()
-  title: string;
+  readonly title: string;
 
   @IsString()
-  description: string;
+  readonly description: string;
 
   @IsBoolean()
-  done: boolean;
+  readonly done: boolean;
 }
