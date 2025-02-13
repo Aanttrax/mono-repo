@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { LoggerInterceptor } from './interceptors/logger/logger.interceptor';
+import { LoggerInterceptor } from './shared/interceptors/logger.interceptor';
 process.loadEnvFile();
 
 async function bootstrap() {
