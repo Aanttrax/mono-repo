@@ -7,7 +7,7 @@ export class RegisterDataDto {
 
   @IsString()
   @IsNotEmpty()
-  readonly password: string;
+  password: string;
 
   @IsString()
   @IsNotEmpty()
