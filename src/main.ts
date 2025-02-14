@@ -6,6 +6,7 @@ process.loadEnvFile();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors({ exposedHeaders: ['auth-token'] });
   app.useGlobalInterceptors(new LoggerInterceptor());
   app.useGlobalPipes(
     new ValidationPipe({
