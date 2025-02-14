@@ -14,7 +14,12 @@ export class AuthService {
   }
 
   async signIn(loginData: LoginDataDto) {
-    console.log(loginData);
-    return 'Sign in';
+    const user = await this.userModel
+      .findOne({
+        email: loginData.email,
+      })
+      .lean()
+      .exec();
+    return user;
   }
 }

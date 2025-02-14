@@ -12,7 +12,7 @@ export class User {
   userName: string;
 
   @Prop({ type: String, required: true })
-  password: boolean;
+  password: string;
 
   @Prop({ type: String, required: true, trim: true, lowercase: true, max: 15 })
   name: string;
