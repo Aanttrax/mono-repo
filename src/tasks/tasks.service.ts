@@ -18,13 +18,12 @@ export class TasksService {
   }
 
   async createTask(task: CreateTaskDto, userId: string) {
-    const newTask = new this.taskModel({ ...task, userId });
+    const newTask = new this.taskModel({ ...task, userId: new Types.ObjectId(userId) });
     await newTask.save();
     return;
   }
 
   async getTaskById(taskId: string, userId: string) {
-    console.log(taskId);
     return await this.taskModel
       .findOne({ _id: new Types.ObjectId(taskId), userId: new Types.ObjectId(userId) }, { createdAt: 0, updatedAt: 0 })
       .lean()
@@ -32,20 +31,16 @@ export class TasksService {
   }
 
   async updateTask(taskId: string, task: UpdateTaskDto, userId: string) {
-    console.log(taskId, task);
-    await this.taskModel
+    return await this.taskModel
       .findOneAndUpdate({ _id: new Types.ObjectId(taskId), userId: new Types.ObjectId(userId) }, task)
       .lean()
       .exec();
-    return;
   }
 
   async deleteTask(taskId: string, userId: string) {
-    console.log(taskId);
-    await this.taskModel
+    return await this.taskModel
       .findOneAndDelete({ _id: new Types.ObjectId(taskId), userId: new Types.ObjectId(userId) })
       .lean()
       .exec();
-    return;
   }
 }
