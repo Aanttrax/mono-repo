@@ -1,0 +1,37 @@
+name: Build and Push Image to GHCR
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build and push to GHCR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get version from VERSION file
+        id: get-version
+        run: |
+          if [ -f VERSION ]; then
+            VERSION=$(cat VERSION)
+          else
+            echo "VERSION file not found. Exiting..."
+            exit 1
+          fi
+          echo "Current version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      - name: Login GHCR
+        run: |
+          docker login --username Aanttrax --password ${{ secrets.GH_PT }} ghcr.io
+
+      - name: Tag Docker and build image with semantic version
+        run: |
+          docker build . -t ghcr.io/aanttrax/mono-repo:${{ steps.get-version.outputs.version }}
+
+      - name: Push Docker image to GHCR
+        run: |
+          docker push ghcr.io/aanttrax/mono-repo:${{ steps.get-version.outputs.version }}
