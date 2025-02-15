@@ -1,39 +1,72 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  NotFoundException,
+  Param,
+  Post,
+  Put,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { JwtAuthGuard } from 'src/shared/guards/jwt.guard';
+import { Request as RequestExpress } from 'express';
 
 @Controller()
 export class TasksController {
   constructor(private tasksService: TasksService) {}
 
   @Get('/task')
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  getTasks() {
-    return this.tasksService.getTasks('asasa');
+  async getTasks(@Request() req: RequestExpress) {
+    const userId = req.user as string;
+    const tasks = await this.tasksService.getTasks(userId);
+    return { success: true, response: tasks };
   }
 
   @Post('/task')
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.CREATED)
-  createTask(@Body() task: CreateTaskDto) {
-    return this.tasksService.createTask(task, 'sfkjsfh');
+  async createTask(@Body() task: CreateTaskDto, @Request() req: RequestExpress) {
+    const userId = req.user as string;
+    await this.tasksService.createTask(task, userId);
+    return { success: true, response: 'Task Created' };
   }
 
   @Get('/task/:taskId')
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  getTaskById(@Param('taskId') taskId: string) {
-    return this.tasksService.getTaskById(taskId, 'asdfsaf');
+  async getTaskById(@Param('taskId') taskId: string, @Request() req: RequestExpress) {
+    const userId = req.user as string;
+    const task = await this.tasksService.getTaskById(taskId, userId);
+    if (!task) throw new NotFoundException('Task not found');
+    return { success: true, response: task };
   }
 
   @Put('/task/:taskId')
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  updateTask(@Param('taskId') taskId: string, @Body() task: UpdateTaskDto) {
-    return this.tasksService.updateTask(taskId, task, 'kajshfs');
+  async updateTask(@Param('taskId') taskId: string, @Body() task: UpdateTaskDto, @Request() req: RequestExpress) {
+    const userId = req.user as string;
+    const isUpdatedTask = await this.tasksService.updateTask(taskId, task, userId);
+    if (!isUpdatedTask) throw new NotFoundException('Task not found');
+    return { success: true, response: 'Task Updated' };
   }
 
   @Delete('/task/:taskId')
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  deleteTask(@Param('taskId') taskId: string) {
-    return this.tasksService.deleteTask(taskId, 'asdfsa');
+  async deleteTask(@Param('taskId') taskId: string, @Request() req: RequestExpress) {
+    const userId = req.user as string;
+    const isDeletedTask = await this.tasksService.deleteTask(taskId, userId);
+    if (!isDeletedTask) throw new NotFoundException('Task not found');
+    return { success: true, response: 'Task Deleted' };
   }
 }
