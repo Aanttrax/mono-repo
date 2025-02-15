@@ -8,6 +8,7 @@ import { Model } from 'mongoose';
 @Injectable()
 export class AuthService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+
   async signUp(registerData: RegisterDataDto) {
     const newUser = new this.userModel(registerData);
     return await newUser.save();
