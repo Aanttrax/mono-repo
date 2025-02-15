@@ -101,3 +101,5 @@ To maintain code quality and backend stability:
 ---
 
 ✨ _This backend is designed to be secure, scalable, and easy to extend. Happy coding!_
+
+<!-- npm install helmet @nestjs/platform-express -->
