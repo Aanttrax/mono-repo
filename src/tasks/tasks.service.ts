@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Task } from 'src/tasks/schemas/task.schema';
+import { Task } from '../tasks/schemas/task.schema';
 import { Model, Types } from 'mongoose';
 
 @Injectable()
@@ -18,8 +18,7 @@ export class TasksService {
   }
 
   async createTask(task: CreateTaskDto, userId: string) {
-    const newTask = new this.taskModel({ ...task, userId: new Types.ObjectId(userId) });
-    await newTask.save();
+    await this.taskModel.create({ ...task, userId: new Types.ObjectId(userId) });
     return;
   }
 
