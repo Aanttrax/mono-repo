@@ -12,7 +12,7 @@ import { Response } from 'express';
 import { RegisterDataDto } from './dto/register.dto';
 import { LoginDataDto } from './dto/login.dto';
 import { AuthService } from './auth.service';
-import { EncryptService } from 'src/shared/services/encrypt.service';
+import { EncryptService } from '../shared/services/encrypt.service';
 import { JwtService } from '@nestjs/jwt';
 
 @Controller()
