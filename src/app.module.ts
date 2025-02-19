@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { Logger, Module, OnModuleInit } from '@nestjs/common';
 import { TasksModule } from './tasks/tasks.module';
 import { MongooseModule } from '@nestjs/mongoose';

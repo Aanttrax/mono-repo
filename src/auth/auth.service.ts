@@ -10,8 +10,8 @@ export class AuthService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   async signUp(registerData: RegisterDataDto) {
-    const newUser = new this.userModel(registerData);
-    return await newUser.save();
+    const newUser = await this.userModel.create(registerData);
+    return newUser;
   }
 
   async signIn(loginData: LoginDataDto) {
@@ -19,8 +19,7 @@ export class AuthService {
       .findOne({
         email: loginData.email,
       })
-      .lean()
-      .exec();
+      .lean();
     return user;
   }
 }
